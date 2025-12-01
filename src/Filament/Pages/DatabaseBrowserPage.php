@@ -39,7 +39,7 @@ class DatabaseBrowserPage extends Page implements HasTable
 
     protected static ?int $navigationSort = 9000;
 
-    protected string $view = 'filament.pages.database-browser';
+    protected string $view = 'filament-database-viewer::page';
 
     protected const PREVIEW_LIMIT = 100;
 
