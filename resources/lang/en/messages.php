@@ -53,6 +53,7 @@ return [
         'no_create_payload' => 'Provide at least one value before creating a record.',
         'no_edit_payload' => 'No editable data provided.',
         'unknown_key' => 'Unable to determine the record key.',
+        'unknown_record' => 'Unable to resolve the selected record.',
     ],
 
     'preview' => [

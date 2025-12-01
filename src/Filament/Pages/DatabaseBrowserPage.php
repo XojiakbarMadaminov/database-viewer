@@ -307,11 +307,17 @@ class DatabaseBrowserPage extends Page implements HasTable
 
         return [
             Action::make('edit')
-                ->label('Edit')
+                ->label(__('database-browser::messages.actions.edit.label'))
                 ->icon(Heroicon::PencilSquare)
                 ->schema(fn () => $this->getDynamicFormComponents())
-                ->fillForm(fn (DatabaseBrowserRecord $record) => $this->getEditFormData($record))
-                ->action(function (array $data, DatabaseBrowserRecord $record): void {
+                ->fillForm(fn (?DatabaseBrowserRecord $record) => $record ? $this->getEditFormData($record) : [])
+                ->action(function (array $data, ?DatabaseBrowserRecord $record): void {
+                    if (! $record) {
+                        $this->notifyFailure(__('database-browser::messages.errors.unknown_record'));
+
+                        return;
+                    }
+
                     if (! $this->selectedTable) {
                         $this->notifyFailure('Select a table before editing.');
 
@@ -352,13 +358,19 @@ class DatabaseBrowserPage extends Page implements HasTable
                         ->send();
                 }),
             Action::make('delete')
-                ->label('Delete')
+                ->label(__('database-browser::messages.actions.delete.label'))
                 ->icon(Heroicon::Trash)
                 ->color('danger')
                 ->requiresConfirmation()
-                ->modalHeading('Delete record?')
-                ->modalDescription('This action cannot be undone.')
-                ->action(function (DatabaseBrowserRecord $record): void {
+                ->modalHeading(__('database-browser::messages.actions.delete.heading'))
+                ->modalDescription(__('database-browser::messages.actions.delete.description'))
+                ->action(function (?DatabaseBrowserRecord $record): void {
+                    if (! $record) {
+                        $this->notifyFailure(__('database-browser::messages.errors.unknown_record'));
+
+                        return;
+                    }
+
                     if (! $this->selectedTable) {
                         $this->notifyFailure('Select a table before deleting records.');
 
