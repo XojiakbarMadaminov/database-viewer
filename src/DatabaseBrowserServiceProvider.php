@@ -2,34 +2,17 @@
 
 namespace Mdmnv\FilamentDatabaseViewer;
 
-use Illuminate\Support\ServiceProvider;
-use Mdmnv\FilamentDatabaseViewer\Filament\Pages\DatabaseBrowserPage;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class DatabaseBrowserServiceProvider extends ServiceProvider
+class DatabaseBrowserServiceProvider extends PackageServiceProvider
 {
-    public function register(): void
+    public static string $name = 'filament-database-viewer';
+
+    public function configurePackage(Package $package): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/database-browser.php', 'database-browser');
+        $package->name(static::$name)->hasViews();
     }
 
-    public function boot(): void
-    {
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'database-browser');
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'database-browser');
-
-        $this->publishes([
-            __DIR__ . '/../config/database-browser.php' => $this->app->configPath('database-browser.php'),
-        ], 'database-browser-config');
-
-        $this->publishes([
-            __DIR__ . '/../resources/views' => $this->app->resourcePath('views/vendor/database-browser'),
-        ], 'database-browser-views');
-
-        $this->publishes([
-            __DIR__ . '/../resources/lang' => $this->app->langPath('vendor/database-browser'),
-        ], 'database-browser-translations');
-
-        DatabaseBrowserPage::configureNavigation();
-        DatabaseBrowserPage::configurePreviewLimits();
-    }
+    public function packageBooted(): void {}
 }
